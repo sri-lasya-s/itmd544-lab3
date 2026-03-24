@@ -1,0 +1,131 @@
+openapi: "3.1.0"
+
+info:
+  title: UX Research Study Tracker API
+  description: API for managing UX research studies
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /:
+    get:
+      summary: Get all studies
+      operationId: StudyService_list
+      responses:
+        "200":
+          description: OK
+
+    post:
+      summary: Create study
+      operationId: StudyService_create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudyCreate"
+      responses:
+        "201":
+          description: Created
+
+  /{id}:
+    get:
+      summary: Get study by ID
+      operationId: StudyService_get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not found
+
+    patch:
+      summary: Update study
+      operationId: StudyService_update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudyUpdate"
+      responses:
+        "200":
+          description: Updated
+
+    delete:
+      summary: Delete study
+      operationId: StudyService_delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted
+
+  /active-studies:
+    get:
+      summary: Get active studies
+      operationId: StudyService_active
+      responses:
+        "200":
+          description: OK
+
+components:
+  schemas:
+    Study:
+      type: object
+      required:
+        - id
+        - studyTitle
+        - method
+        - participants
+      properties:
+        id:
+          type: string
+        studyTitle:
+          type: string
+        method:
+          type: string
+          enum: [Interview, Survey, UsabilityTest]
+        participants:
+          type: integer
+
+    StudyCreate:
+      type: object
+      required:
+        - studyTitle
+        - method
+        - participants
+      properties:
+        studyTitle:
+          type: string
+        method:
+          type: string
+          enum: [Interview, Survey, UsabilityTest]
+        participants:
+          type: integer
+
+    StudyUpdate:
+      type: object
+      properties:
+        studyTitle:
+          type: string
+        method:
+          type: string
+        participants:
+          type: integer
